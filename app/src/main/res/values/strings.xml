@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SpotifyClone</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="good_evening_txt">Good Evening</string>
+    <string name="default_podcast_title">Podcast Title</string>
+    <string name="default_large_text">pe specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in</string>
+    <string name="all_episodes_txt">Todos los episodios</string>
+    <string name="default_date">12 Mayo</string>
+    <string name="default_time">24 min</string>
+</resources>
