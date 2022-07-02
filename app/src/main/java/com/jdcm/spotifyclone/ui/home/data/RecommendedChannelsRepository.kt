@@ -10,8 +10,12 @@ constructor(
     private val channelsApi: ChannelsService?
 ) {
 
-    suspend fun getRecommendedChannels(versionHeader: String): ArrayList<ChannelsModel?> {
-        return channelsApi!!.getRecommendedChannels(versionHeader)!!.body
+    suspend fun getRecommendedChannels(versionHeader: String): ArrayList<ChannelsModel?>? {
+        return if (channelsApi!!.getRecommendedChannels(versionHeader) != null) {
+            channelsApi.getRecommendedChannels(versionHeader)!!.body
+        } else {
+            null
+        }
     }
 
 }
