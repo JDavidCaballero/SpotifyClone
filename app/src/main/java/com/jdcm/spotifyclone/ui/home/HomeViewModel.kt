@@ -3,11 +3,30 @@ package com.jdcm.spotifyclone.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jdcm.spotifyclone.ui.home.data.RecommendedChannelsRepository
+import com.jdcm.spotifyclone.ui.home.data.model.ChannelsModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject
+constructor(private val recommendedChannelRepository: RecommendedChannelsRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+     val channelModel = MutableLiveData<ArrayList<ChannelsModel?>>()
+     val loading = MutableLiveData<Boolean>()
+
+    fun onCreate(versionHeader: String) {
+        viewModelScope.launch {
+            loading.postValue(true)
+            val result = recommendedChannelRepository.getRecommendedChannels(versionHeader)
+            //Values to Fragment
+            channelModel.postValue(result)
+            loading.postValue(false)
+        }
+
+
     }
-    val text: LiveData<String> = _text
+
 }
