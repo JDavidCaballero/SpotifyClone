@@ -1,6 +1,8 @@
 package com.jdcm.spotifyclone.ui.home
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +57,11 @@ class HomeFragment : Fragment() {
             } else {
                 binding.noDataLayout.root.visibility = View.VISIBLE
                 binding.relativeNoConnection.visibility = View.VISIBLE
+                binding.noDataLayout.btnReconnection.setOnClickListener{
+                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+                    recommendedChannelViewModel.onCreate(API_VERSION)
+
+                }
             }
 
             recommendedChannelViewModel.loading.observe(viewLifecycleOwner) {
