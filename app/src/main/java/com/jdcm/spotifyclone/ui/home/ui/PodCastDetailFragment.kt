@@ -21,7 +21,11 @@ import com.jdcm.spotifyclone.ui.home.ui.adapter.ChannelDetailAdapter
 import com.jdcm.spotifyclone.ui.home.ui.data.model.AudioClips
 import com.jdcm.spotifyclone.ui.home.ui.data.model.SongsModel
 import com.jdcm.spotifyclone.utils.Constants
+import com.jdcm.spotifyclone.utils.rvListener.ItemSongsClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @AndroidEntryPoint
@@ -31,17 +35,17 @@ class PodCastDetailFragment : Fragment() {
     private val viewModel: PodCastDetailViewModel by viewModels()
     private val channelId by lazy { PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelId }
     private var audioClipsList: ArrayList<AudioClips>? = null
+    private var adapter: ChannelDetailAdapter? = null
+    private val podCast by lazy { actualSongUri }
 
-    val podCast by lazy { actualSongUri }
-
-    val mediaPlayer by lazy {
+    private val mediaPlayer by lazy {
         val media = MediaPlayer()
         media.setDataSource(podCast)
         media.prepare()
         media
     }
 
-    val songs by lazy {
+    private val songs by lazy {
         val allSongs: ArrayList<SongsModel> = ArrayList()
         for (clips in audioClipsList!!) {
             allSongs.add(SongsModel(clips.urls.high_mp3, clips.title))
@@ -159,46 +163,64 @@ class PodCastDetailFragment : Fragment() {
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.hasFixedSize()
-        val adapter = ChannelDetailAdapter(audioClipsList!!, requireActivity())
+        adapter = ChannelDetailAdapter(
+            audioClipsList!!,
+            requireActivity(),
+            object : ItemSongsClickListener {
+                override fun onClickPlay(position: Int) {
+                    actualSongIndex = position
+                    refreshSong()
+                    adapter!!.notifyDataSetChanged()
+                }
+            })
         recyclerView.adapter = adapter
     }
 
-    fun playClicked(v: View) {
+    private fun playClicked(v: View) {
 
         if (!mediaPlayer.isPlaying) {
+            binding.barMusicPlayer.root.visibility = View.VISIBLE
             binding.barMusicPlayer.btnImvAction.setImageDrawable(requireContext().getDrawable(R.drawable.ic_pause))
-            mediaPlayer.start()
+            CoroutineScope(Dispatchers.IO).launch {
+                mediaPlayer.start()
+            }
         } else {
             binding.barMusicPlayer.btnImvAction.setImageDrawable(requireContext().getDrawable(R.drawable.ic_play))
-            mediaPlayer.pause()
-        }
+            CoroutineScope(Dispatchers.IO).launch {
 
+                mediaPlayer.pause()
+            }
+        }
     }
 
-    fun nextClicked(v: View) {
+    private fun nextClicked(v: View) {
         actualSongIndex++
         refreshSong()
     }
 
-    fun prevClicked(v: View) {
+    private fun prevClicked(v: View) {
         actualSongIndex--
         refreshSong()
     }
 
     fun refreshSong() {
 
-        mediaPlayer.reset()
+        CoroutineScope(Dispatchers.IO).launch {
+            mediaPlayer.reset()
+        }
         val uri = actualSongUri
         mediaPlayer.setDataSource(uri)
         mediaPlayer.prepare()
+
         playClicked(binding.barMusicPlayer.btnImvAction)
         binding.barMusicPlayer.podcastTitle.text = actualSongName
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        mediaPlayer.stop()
+        CoroutineScope(Dispatchers.IO).launch {
+            mediaPlayer.stop()
+        }
     }
 
 }

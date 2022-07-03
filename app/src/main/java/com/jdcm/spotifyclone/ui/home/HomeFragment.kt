@@ -63,6 +63,7 @@ class HomeFragment : Fragment() {
 
             recommendedChannelViewModel.loading.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
+                binding.rvRecommendedPodcast.isVisible = !it
             }
         }
     }
