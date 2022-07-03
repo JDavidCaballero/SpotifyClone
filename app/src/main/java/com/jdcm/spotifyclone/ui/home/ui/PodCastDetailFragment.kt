@@ -1,6 +1,7 @@
 package com.jdcm.spotifyclone.ui.home.ui
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.jdcm.spotifyclone.R
 import com.jdcm.spotifyclone.databinding.FragmentPodCastDetailBinding
 import com.jdcm.spotifyclone.ui.home.ui.adapter.ChannelDetailAdapter
 import com.jdcm.spotifyclone.ui.home.ui.data.model.AudioClips
+import com.jdcm.spotifyclone.ui.home.ui.data.model.SongsModel
 import com.jdcm.spotifyclone.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -30,17 +32,48 @@ class PodCastDetailFragment : Fragment() {
     private val channelId by lazy { PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelId }
     private var audioClipsList: ArrayList<AudioClips>? = null
 
+    val podCast by lazy { actualSongUri }
+
+    val mediaPlayer by lazy {
+        val media = MediaPlayer()
+        media.setDataSource(podCast)
+        media.prepare()
+        media
+    }
+
+    val songs by lazy {
+        val allSongs: ArrayList<SongsModel> = ArrayList()
+        for (clips in audioClipsList!!) {
+            allSongs.add(SongsModel(clips.urls.high_mp3, clips.title))
+        }
+        allSongs.filter { it.mp3.contains(".mp3") }
+    }
+
+    var actualSongIndex = 0
+        set(value) {
+            val circularVariable = if (value == -1) {
+                songs.size - 1
+            } else {
+                value % songs.size
+            }
+            field = circularVariable
+            actualSongName = songs[circularVariable].songName
+            actualSongUri = songs[circularVariable].mp3
+
+        }
+
+    var actualSongName: String = ""
+    var actualSongUri : String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPodCastDetailBinding.inflate(inflater, container, false)
         binding.toolbarPodCastDetail.setNavigationOnClickListener { findNavController().popBackStack() }
-
-
-
         setUiBasicInfo()
         initViewModel()
+        binding.barMusicPlayer.btnImvAction.setOnClickListener(this::playClicked)
 
         return binding.root
     }
@@ -58,6 +91,7 @@ class PodCastDetailFragment : Fragment() {
                 audioClipsList!!.clear()
                 audioClipsList!!.addAll(ChannelDetailApi.audio_clips)
                 initRecyclerView(binding.rvPodcastEpisodes)
+                initMediaPlayer()
             } else {
                 //If theres no connection de no data layout pops and make the Intent to go to wifi settings
                 binding.noDataLayout.root.visibility = View.VISIBLE
@@ -84,18 +118,28 @@ class PodCastDetailFragment : Fragment() {
 
     }
 
+    private fun initMediaPlayer() {
+        actualSongName = songs[actualSongIndex].songName
+        actualSongUri = songs[actualSongIndex].mp3
+        binding.barMusicPlayer.podcastTitle.text = actualSongName
+    }
+
     private fun setUiBasicInfo() {
         //Podcast Logo
         Glide.with(requireContext())
             .load(PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelLogo)
             .placeholder(R.drawable.ic_podcast)
             .into(binding.podcastImv)
+
+        Glide.with(requireContext())
+            .load(PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelLogo)
+            .placeholder(R.drawable.ic_podcast)
+            .into(binding.barMusicPlayer.podcastImv)
         //PodCast Title
         binding.podcastTitle.text =
             PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelTitle
         binding.toolbarTitle.text =
             PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelTitle
-
         //To observe the state of collapsing toolbar
         binding.appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
@@ -105,7 +149,6 @@ class PodCastDetailFragment : Fragment() {
                 binding.toolbarTitle.visibility = View.GONE
             }
         })
-
         //PodcastDescription
         binding.descriptionTv.text =
             PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelDescription
@@ -117,8 +160,17 @@ class PodCastDetailFragment : Fragment() {
         recyclerView.hasFixedSize()
         val adapter = ChannelDetailAdapter(audioClipsList!!, requireActivity())
         recyclerView.adapter = adapter
-
     }
 
+    fun playClicked(v: View) {
 
+        if (!mediaPlayer.isPlaying) {
+            binding.barMusicPlayer.btnImvAction.setImageDrawable(requireContext().getDrawable(R.drawable.ic_pause))
+            mediaPlayer.start()
+        } else {
+            binding.barMusicPlayer.btnImvAction.setImageDrawable(requireContext().getDrawable(R.drawable.ic_play))
+            mediaPlayer.pause()
+        }
+
+    }
 }

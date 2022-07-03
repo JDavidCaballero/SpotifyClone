@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
                 override fun onItemClick(view: View?, position: Int) {
                     val action: NavDirections =
                         HomeFragmentDirections.actionNavigationHomeToPodCastDetailFragment(
-                            recommendedList!![position]!!.urls.logo_image.original,
+                            recommendedList!![position]!!.urls.logo_image.original!!,
                             recommendedList!![position]!!.title,
                             recommendedList!![position]!!.description,
                             recommendedList!![position]!!.id

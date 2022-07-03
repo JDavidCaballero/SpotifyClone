@@ -23,7 +23,7 @@ data class Urls(
 )
 
 data class LogoImage(
-    @SerializedName("original") val original: String
+    @SerializedName("original") val original: String?
 )
 
 data class BannerImage(
