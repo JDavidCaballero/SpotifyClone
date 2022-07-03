@@ -10,8 +10,12 @@
     <string name="default_date">12 Mayo</string>
     <string name="default_time">24 min</string>
     <string name="show_you_might_like_text">Shows que te podrian gustar</string>
+    <string name="audio_clips_title_text">Audio clips que te podrian interesar</string>
+
     <string name="no_internet_connection_txt">No hay conexión a internet</string>
     <string name="activate_data_wifi_txt">Activa los datos moviles o conectate a Wi-Fi.</string>
     <string name="connect_txt">Conectarse</string>
     <string name="no_internet_connection_available_txt">No hay conexión a internet disponible</string>
+    <string name="audio_clips_txt">Audio clips</string>
+    <string name="no_dedscription_txt">Sin descripción</string>
 </resources>

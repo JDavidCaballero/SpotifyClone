@@ -1,10 +1,10 @@
-package com.jdcm.spotifyclone.ui.home.ui
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jdcm.spotifyclone.ui.home.ui.data.ChannelDetailRepository
-import com.jdcm.spotifyclone.ui.home.ui.data.model.ChannelDetailModel
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.ChannelDetailRepository
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.ChannelDetailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

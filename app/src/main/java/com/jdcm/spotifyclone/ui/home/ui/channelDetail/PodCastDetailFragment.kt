@@ -1,8 +1,9 @@
-package com.jdcm.spotifyclone.ui.home.ui
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail
 
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
+import com.google.android.material.appbar.AppBarLayout
 import com.jdcm.spotifyclone.R
 import com.jdcm.spotifyclone.databinding.FragmentPodCastDetailBinding
-import com.jdcm.spotifyclone.ui.home.ui.adapter.ChannelDetailAdapter
-import com.jdcm.spotifyclone.ui.home.ui.data.model.AudioClips
-import com.jdcm.spotifyclone.ui.home.ui.data.model.SongsModel
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.adapter.ChannelDetailAdapter
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.ChannelAudioClips
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.SongsModel
 import com.jdcm.spotifyclone.utils.Constants
 import com.jdcm.spotifyclone.utils.rvListener.ItemSongsClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,26 +29,27 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
+
 @AndroidEntryPoint
 class PodCastDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentPodCastDetailBinding
     private val viewModel: PodCastDetailViewModel by viewModels()
     private val channelId by lazy { PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelId }
-    private var audioClipsList: ArrayList<AudioClips>? = null
+    private var channelAudioClipsList: ArrayList<ChannelAudioClips>? = null
     private var adapter: ChannelDetailAdapter? = null
     private val podCast by lazy { actualSongUri }
 
     private val mediaPlayer by lazy {
         val media = MediaPlayer()
         media.setDataSource(podCast)
-        media.prepare()
+        media.prepareAsync()
         media
     }
 
     private val songs by lazy {
         val allSongs: ArrayList<SongsModel> = ArrayList()
-        for (clips in audioClipsList!!) {
+        for (clips in channelAudioClipsList!!) {
             allSongs.add(SongsModel(clips.urls.high_mp3, clips.title))
         }
         allSongs.filter { it.mp3.contains(".mp3") }
@@ -92,9 +94,9 @@ class PodCastDetailFragment : Fragment() {
                 binding.noDataLayout.root.visibility = View.GONE
                 binding.relativeNoConnection.visibility = View.GONE
 
-                audioClipsList = ArrayList()
-                audioClipsList!!.clear()
-                audioClipsList!!.addAll(ChannelDetailApi.audio_clips)
+                channelAudioClipsList = ArrayList()
+                channelAudioClipsList!!.clear()
+                channelAudioClipsList!!.addAll(ChannelDetailApi.audio_clips)
                 initRecyclerView(binding.rvPodcastEpisodes)
                 initMediaPlayer()
             } else {
@@ -146,7 +148,7 @@ class PodCastDetailFragment : Fragment() {
         binding.toolbarTitle.text =
             PodCastDetailFragmentArgs.fromBundle(requireArguments()).channelTitle
         //To observe the state of collapsing toolbar
-        binding.appBarLayout.addOnOffsetChangedListener(OnOffsetChangedListener { appBarLayout, verticalOffset ->
+        binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (abs(verticalOffset) - appBarLayout.totalScrollRange == 0) {
                 //Collapsed
                 binding.toolbarTitle.visibility = View.VISIBLE
@@ -164,7 +166,7 @@ class PodCastDetailFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.hasFixedSize()
         adapter = ChannelDetailAdapter(
-            audioClipsList!!,
+            channelAudioClipsList!!,
             requireActivity(),
             object : ItemSongsClickListener {
                 override fun onClickPlay(position: Int) {
@@ -181,15 +183,10 @@ class PodCastDetailFragment : Fragment() {
         if (!mediaPlayer.isPlaying) {
             binding.barMusicPlayer.root.visibility = View.VISIBLE
             binding.barMusicPlayer.btnImvAction.setImageDrawable(requireContext().getDrawable(R.drawable.ic_pause))
-            CoroutineScope(Dispatchers.IO).launch {
-                mediaPlayer.start()
-            }
+            mediaPlayer.start()
         } else {
             binding.barMusicPlayer.btnImvAction.setImageDrawable(requireContext().getDrawable(R.drawable.ic_play))
-            CoroutineScope(Dispatchers.IO).launch {
-
-                mediaPlayer.pause()
-            }
+            mediaPlayer.pause()
         }
     }
 
@@ -205,11 +202,23 @@ class PodCastDetailFragment : Fragment() {
 
     fun refreshSong() {
 
-        CoroutineScope(Dispatchers.IO).launch {
-            mediaPlayer.reset()
-        }
+        mediaPlayer.stop()
+        mediaPlayer.reset()
         val uri = actualSongUri
         mediaPlayer.setDataSource(uri)
+
+        mediaPlayer.setOnPreparedListener { mp ->
+            mp.setWakeMode(
+                requireActivity().applicationContext,
+                PowerManager.PARTIAL_WAKE_LOCK
+            )
+            mp.start()
+            mp.seekTo(0)
+        }
+
+
+        mediaPlayer.setOnCompletionListener { refreshSong() }
+
         mediaPlayer.prepare()
 
         playClicked(binding.barMusicPlayer.btnImvAction)

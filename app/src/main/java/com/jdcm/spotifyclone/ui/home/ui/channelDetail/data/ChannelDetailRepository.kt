@@ -1,7 +1,7 @@
-package com.jdcm.spotifyclone.ui.home.ui.data
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.data
 
-import com.jdcm.spotifyclone.ui.home.ui.data.model.ChannelDetailModel
-import com.jdcm.spotifyclone.ui.home.ui.data.network.ChannelDetailService
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.ChannelDetailModel
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.network.ChannelDetailService
 import javax.inject.Inject
 
 class ChannelDetailRepository

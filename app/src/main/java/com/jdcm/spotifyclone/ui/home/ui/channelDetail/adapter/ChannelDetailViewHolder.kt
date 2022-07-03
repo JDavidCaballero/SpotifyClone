@@ -1,17 +1,17 @@
-package com.jdcm.spotifyclone.ui.home.ui.adapter
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.adapter
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jdcm.spotifyclone.R
 import com.jdcm.spotifyclone.databinding.ListItemPodcastBinding
-import com.jdcm.spotifyclone.ui.home.ui.data.model.AudioClips
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.ChannelAudioClips
 import com.jdcm.spotifyclone.utils.rvListener.ItemSongsClickListener
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
 
 class ChannelDetailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val binding = ListItemPodcastBinding.bind(view)
@@ -21,7 +21,7 @@ class ChannelDetailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     @SuppressLint("SetTextI18n")
     fun bind(
-        channelAudioClips: AudioClips,
+        channelAudioClips: ChannelAudioClips,
         context: Activity,
         clickListener: ItemSongsClickListener,
         position: Int
@@ -34,7 +34,12 @@ class ChannelDetailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         //Title
         binding.podcastTitle.text = channelAudioClips.title
         //SubTitle
-        binding.podcastDescription.text = channelAudioClips.description
+        binding.podcastDescription.text = if (!channelAudioClips.description.isNullOrEmpty()) {
+            channelAudioClips.description
+        } else {
+            context.getString(R.string.no_dedscription_txt)
+        }
+
         //Date
         val date = inputFormat.parse(channelAudioClips.updated_at.substring(0, 10))
         binding.podcastDate.text = timeFormat.format(date!!)
@@ -42,25 +47,24 @@ class ChannelDetailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val time = channelAudioClips.duration / 60
         binding.podcastDuration.text = "${time.toString().substring(0, 3)} Min"
 
-        if (position == selected){
-            Glide.with(context)
-                .load(R.drawable.ic_pause_circle)
-                .placeholder(R.drawable.ic_podcast)
-                .into(binding.imActionButton)
-
-        }else{
-
-
-            Glide.with(context)
-                .load(R.drawable.ic_play_circle)
-                .placeholder(R.drawable.ic_podcast)
-                .into(binding.imActionButton)
-        }
-
         binding.imActionButton.setOnClickListener {
+            binding.imActionButton.setImageDrawable(ContextCompat.getDrawable(binding.imActionButton.context,R.drawable.ic_pause_circle))
+
             selected = position
+
+
+
             clickListener.onClickPlay(position = position)
+
+
+
         }
+
+        if (position != selected){
+            binding.imActionButton.setImageDrawable(ContextCompat.getDrawable(binding.imActionButton.context,R.drawable.ic_play_circle))
+        }
+
+
 
 
 

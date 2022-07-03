@@ -23,6 +23,42 @@
 
     <TextView
 
+        android:id="@+id/audio_clips_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/audio_clips_title_text"
+        android:textColor="@color/white"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/rv_recommended_podcast"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/home_title"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/audio_imv"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/palm_album_cover"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@id/audio_clips_title"
+        app:shapeAppearance="@style/roundedImageView"
+        tools:ignore="ContentDescription" />
+
+    <TextView
         android:id="@+id/rv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,12 +67,12 @@
         android:textColor="@color/white"
         android:textSize="21sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/rv_recommended_podcast"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintHorizontal_bias="0.056"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_title"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/audio_imv" />
 
     <androidx.recyclerview.widget.RecyclerView
 

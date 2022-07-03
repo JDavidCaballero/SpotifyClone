@@ -1,4 +1,4 @@
-package com.jdcm.spotifyclone.ui.home.ui.data.model
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model
 
 import com.google.gson.annotations.SerializedName
 

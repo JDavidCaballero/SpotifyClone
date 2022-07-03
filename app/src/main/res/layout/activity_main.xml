@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -13,6 +14,8 @@
         android:layout_marginEnd="0dp"
         android:background="@color/black"
         android:alpha="0.9"
+        android:layout_marginBottom="58dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:itemIconTint="@color/white"

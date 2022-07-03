@@ -1,11 +1,11 @@
-package com.jdcm.spotifyclone.ui.home.ui.data.model
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model
 
 import com.google.gson.annotations.SerializedName
 import com.jdcm.spotifyclone.ui.home.data.model.LogoImage
 
 data class ChannelDetailModel(
     @SerializedName("totals") val totals: Totals,
-    @SerializedName("audio_clips") val audio_clips: ArrayList<AudioClips>
+    @SerializedName("audio_clips") val audio_clips: ArrayList<ChannelAudioClips>
 )
 
 data class Totals(
@@ -14,12 +14,12 @@ data class Totals(
 )
 
 
-data class AudioClips(
+data class ChannelAudioClips(
     @SerializedName("id") val id: Int,
     @SerializedName("season_number") val season_number: String,
     @SerializedName("episode_number") val episode_number: String,
     @SerializedName("title") val title: String,
-    @SerializedName("description") val description: String,
+    @SerializedName("description") val description: String?,
     @SerializedName("formatted_description") val formatted_description: String,
     @SerializedName("updated_at") val updated_at: String,
     @SerializedName("user") val user: User?,

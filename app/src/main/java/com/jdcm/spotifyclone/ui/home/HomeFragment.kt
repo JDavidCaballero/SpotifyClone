@@ -35,6 +35,13 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         initViewModel()
+
+        binding.audioImv.setOnClickListener {
+            val action: NavDirections =
+                HomeFragmentDirections.actionNavigationHomeToAudioClipsFragment()
+            findNavController().navigate(action)
+        }
+
         return binding.root
     }
 
@@ -42,7 +49,6 @@ class HomeFragment : Fragment() {
         recommendedChannelViewModel.onCreate(API_VERSION_TWO)
 
         recommendedChannelViewModel.channelModel.observe(viewLifecycleOwner) { channelApi ->
-
             if (!channelApi.isNullOrEmpty()) {
                 //Fill the list that goes to the rv adapter and clears it for cache leaks etc
                 binding.noDataLayout.root.visibility = View.GONE
@@ -60,10 +66,12 @@ class HomeFragment : Fragment() {
                     recommendedChannelViewModel.onCreate(API_VERSION_TWO)
                 }
             }
-
             recommendedChannelViewModel.loading.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
                 binding.rvRecommendedPodcast.isVisible = !it
+                binding.audioImv.isVisible = !it
+                binding.audioClipsTitle.isVisible = !it
+                binding.rvTitle.isVisible = !it
             }
         }
     }

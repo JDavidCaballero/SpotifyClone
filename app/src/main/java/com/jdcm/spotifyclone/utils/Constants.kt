@@ -14,6 +14,8 @@ class Constants {
 
         const val GET_RECOMMENDED_CHANNELS = "channels/recommended"
         const val GET_CHANNEL_AUDIO_CLIPS = "channels/{channel_id}/audio_clips"
+        const val GET_AUDIO_CLIPS = "audio_clips"
     }
+
 
 }

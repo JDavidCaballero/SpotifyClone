@@ -1,7 +1,6 @@
-package com.jdcm.spotifyclone.ui.home.ui.data.network
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.network
 
-import com.jdcm.spotifyclone.ui.home.data.model.ChannelsResponseModel
-import com.jdcm.spotifyclone.ui.home.ui.data.model.ChannelDetailResponse
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.ChannelDetailResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception

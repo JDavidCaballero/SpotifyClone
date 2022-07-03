@@ -1,6 +1,6 @@
-package com.jdcm.spotifyclone.ui.home.ui.data.network
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.network
 
-import com.jdcm.spotifyclone.ui.home.ui.data.model.ChannelDetailResponse
+import com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model.ChannelDetailResponse
 import com.jdcm.spotifyclone.utils.Constants.Companion.GET_CHANNEL_AUDIO_CLIPS
 import retrofit2.Response
 import retrofit2.http.GET

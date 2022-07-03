@@ -13,10 +13,13 @@
         <action
             android:id="@+id/action_navigation_home_to_podCastDetailFragment"
             app:destination="@id/podCastDetailFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_audioClipsFragment"
+            app:destination="@id/audioClipsFragment" />
     </fragment>
     <fragment
         android:id="@+id/podCastDetailFragment"
-        android:name="com.jdcm.spotifyclone.ui.home.ui.PodCastDetailFragment"
+        android:name="com.jdcm.spotifyclone.ui.home.ui.channelDetail.PodCastDetailFragment"
         android:label="fragment_pod_cast_detail"
         tools:layout="@layout/fragment_pod_cast_detail" >
         <argument
@@ -30,6 +33,11 @@
             app:argType="string" />
         <argument android:name="channelDescription" />
     </fragment>
+    <fragment
+        android:id="@+id/audioClipsFragment"
+        android:name="com.jdcm.spotifyclone.ui.home.ui.audioClips.AudioClipsFragment"
+        android:label="fragment_audio_clips"
+        tools:layout="@layout/fragment_audio_clips" />
 
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.jdcm.spotifyclone.ui.home.ui.data.model
+package com.jdcm.spotifyclone.ui.home.ui.channelDetail.data.model
 
 data class SongsModel (
 var mp3: String = "",
