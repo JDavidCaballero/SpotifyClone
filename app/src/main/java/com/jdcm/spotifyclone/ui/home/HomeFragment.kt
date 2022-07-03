@@ -56,6 +56,7 @@ class HomeFragment : Fragment() {
 
         val value = calendar.time.toString().substring(11, 13).toInt()
 
+        //here get a calendar instance for set the dynamic title text depending on time
         binding.homeTitle.text = when (value) {
             in 1..11 -> {
                 getString(R.string.good_morning_txt)
@@ -94,6 +95,7 @@ class HomeFragment : Fragment() {
                 }
             }
             recommendedChannelViewModel.loading.observe(viewLifecycleOwner) {
+                //Dynamic loading for all the views
                 binding.progressBar.isVisible = it
                 binding.rvRecommendedPodcast.isVisible = !it
                 binding.audioImv.isVisible = !it
@@ -115,6 +117,7 @@ class HomeFragment : Fragment() {
             object : RecyclerItemClickListener.OnItemClickListener {
                 override fun onItemClick(view: View?, position: Int) {
                     val action: NavDirections =
+                        //Send basic channel info to channel detail fragment
                         HomeFragmentDirections.actionNavigationHomeToPodCastDetailFragment(
                             recommendedList!![position]!!.urls.logo_image.original!!,
                             recommendedList!![position]!!.title,
