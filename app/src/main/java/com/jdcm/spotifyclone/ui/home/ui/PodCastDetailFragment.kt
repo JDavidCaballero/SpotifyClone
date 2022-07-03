@@ -63,7 +63,7 @@ class PodCastDetailFragment : Fragment() {
         }
 
     var actualSongName: String = ""
-    var actualSongUri : String = ""
+    var actualSongUri: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +74,8 @@ class PodCastDetailFragment : Fragment() {
         setUiBasicInfo()
         initViewModel()
         binding.barMusicPlayer.btnImvAction.setOnClickListener(this::playClicked)
-
+        binding.barMusicPlayer.btnImvActionNext.setOnClickListener(this::nextClicked)
+        binding.barMusicPlayer.btnImvActionPrevious.setOnClickListener(this::prevClicked)
         return binding.root
     }
 
@@ -173,4 +174,31 @@ class PodCastDetailFragment : Fragment() {
         }
 
     }
+
+    fun nextClicked(v: View) {
+        actualSongIndex++
+        refreshSong()
+    }
+
+    fun prevClicked(v: View) {
+        actualSongIndex--
+        refreshSong()
+    }
+
+    fun refreshSong() {
+
+        mediaPlayer.reset()
+        val uri = actualSongUri
+        mediaPlayer.setDataSource(uri)
+        mediaPlayer.prepare()
+        playClicked(binding.barMusicPlayer.btnImvAction)
+        binding.barMusicPlayer.podcastTitle.text = actualSongName
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        mediaPlayer.stop()
+    }
+
 }
