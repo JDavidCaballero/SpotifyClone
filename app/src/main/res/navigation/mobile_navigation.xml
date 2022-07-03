@@ -9,17 +9,27 @@
         android:id="@+id/navigation_home"
         android:name="com.jdcm.spotifyclone.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_podCastDetailFragment"
+            app:destination="@id/podCastDetailFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.jdcm.spotifyclone.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/podCastDetailFragment"
+        android:name="com.jdcm.spotifyclone.ui.home.ui.PodCastDetailFragment"
+        android:label="fragment_pod_cast_detail"
+        tools:layout="@layout/fragment_pod_cast_detail" >
+        <argument
+            android:name="channelId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="channelLogo"
+            app:argType="string" />
+        <argument android:name="channelTitle"
+            app:argType="string" />
+        <argument android:name="channelDescription" />
+    </fragment>
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.jdcm.spotifyclone.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+
 </navigation>

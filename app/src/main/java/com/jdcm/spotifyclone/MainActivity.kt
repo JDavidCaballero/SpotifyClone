@@ -1,4 +1,4 @@
-package com.jdcm.spotifyclone.ui
+package com.jdcm.spotifyclone
 
 import android.os.Bundle
 import android.view.Window
@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
@@ -45,5 +47,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_home)
+                }
+            }
+            true
+        }
     }
 }

@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/im_podcast_detail"
+        android:id="@+id/imv_podcast"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -20,28 +20,30 @@
 
     <TextView
         android:id="@+id/podcast_title"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="20dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="75dp"
         android:maxLines="2"
         android:text="@string/default_podcast_title"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/im_podcast_detail"
-        app:layout_constraintStart_toEndOf="@+id/im_podcast_detail"
-        app:layout_constraintTop_toTopOf="@+id/im_podcast_detail"
+        app:layout_constraintBottom_toBottomOf="@+id/imv_podcast"
+        app:layout_constraintStart_toEndOf="@+id/imv_podcast"
+        app:layout_constraintTop_toTopOf="@+id/imv_podcast"
         app:layout_constraintVertical_bias="0.483" />
 
     <TextView
         android:id="@+id/podcast_description"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
-        android:maxLines="2"
+        android:maxLines="3"
         android:text="@string/default_podcast_title"
         android:textColor="@color/gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/im_podcast_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/imv_podcast" />
 
     <TextView
         android:id="@+id/podcast_date"
@@ -56,6 +58,7 @@
         app:layout_constraintTop_toBottomOf="@id/podcast_description" />
 
     <TextView
+        android:id="@+id/podcast_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

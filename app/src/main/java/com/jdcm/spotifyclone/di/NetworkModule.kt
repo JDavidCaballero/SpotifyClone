@@ -1,6 +1,7 @@
 package com.jdcm.spotifyclone.di
 
 import com.jdcm.spotifyclone.ui.home.data.network.ChannelsApiClient
+import com.jdcm.spotifyclone.ui.home.ui.data.network.ChannelDetailApiClient
 import com.jdcm.spotifyclone.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -39,6 +40,12 @@ object NetworkModule {
     @Provides
     fun provideRecommendedChannelsApiClient(retrofit: Retrofit): ChannelsApiClient {
         return retrofit.create(ChannelsApiClient::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideChannelDetailApiClient(retrofit: Retrofit): ChannelDetailApiClient {
+        return retrofit.create(ChannelDetailApiClient::class.java)
     }
 
 
