@@ -14,15 +14,19 @@ import javax.inject.Inject
 class HomeViewModel @Inject
 constructor(private val recommendedChannelRepository: RecommendedChannelsRepository) : ViewModel() {
 
-     val channelModel = MutableLiveData<ArrayList<ChannelsModel?>>()
-     val loading = MutableLiveData<Boolean>()
+    val channelModel = MutableLiveData<ArrayList<ChannelsModel?>>()
+    val loading = MutableLiveData<Boolean>()
 
     fun onCreate(versionHeader: String) {
         viewModelScope.launch {
             loading.postValue(true)
             val result = recommendedChannelRepository.getRecommendedChannels(versionHeader)
             //Values to Fragment
-            channelModel.postValue(result)
+            if (result != null) {
+                channelModel.postValue(result)
+            } else {
+                channelModel.postValue(null)
+            }
             loading.postValue(false)
         }
 
