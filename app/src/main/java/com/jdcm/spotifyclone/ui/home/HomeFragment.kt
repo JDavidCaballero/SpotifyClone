@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,12 +14,16 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jdcm.spotifyclone.R
 import com.jdcm.spotifyclone.databinding.FragmentHomeBinding
 import com.jdcm.spotifyclone.ui.home.adapter.ChannelsAdapter
 import com.jdcm.spotifyclone.ui.home.data.model.ChannelsModel
 import com.jdcm.spotifyclone.utils.Constants.Companion.API_VERSION_TWO
 import com.jdcm.spotifyclone.utils.rvListener.RecyclerItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -27,6 +32,8 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val recommendedChannelViewModel: HomeViewModel by viewModels()
     private var recommendedList: ArrayList<ChannelsModel?>? = null
+    private val calendar by lazy { Calendar.getInstance() }
+    private val formatter by lazy { SimpleDateFormat("hh:mm:ss") }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,8 +41,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setDynamicTitle()
         initViewModel()
-
         binding.audioImv.setOnClickListener {
             val action: NavDirections =
                 HomeFragmentDirections.actionNavigationHomeToAudioClipsFragment()
@@ -43,6 +50,26 @@ class HomeFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setDynamicTitle() {
+
+        val value = calendar.time.toString().substring(11, 13).toInt()
+
+        binding.homeTitle.text = when (value) {
+            in 1..11 -> {
+                getString(R.string.good_morning_txt)
+            }
+            in 12..18 -> {
+                getString(R.string.good_afternoon_txt)
+            }
+            in 19..24 -> {
+                getString(R.string.good_night_txt)
+            }
+            else -> {
+                getString(R.string.greetings_txt)
+            }
+        }
     }
 
     private fun initViewModel() {
