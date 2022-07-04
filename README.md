@@ -2,6 +2,9 @@
 
 -Developed by Juan David Caballero Mejía
 
+//You Can Take a look of the App downloading it in a signed Apk!
+https://drive.google.com/drive/folders/1OWg0aEKzm6uBYPJGKG_mwKOrDf4jT0K3?usp=sharing
+
 --Basics--
 
 App implementations
@@ -24,3 +27,4 @@ Use the Media player instance from java to reproduce the .mp3 files given by the
 //Dessign 
 
 Inspired on Spotify app home and podcast screens.
+
